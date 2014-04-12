@@ -1,0 +1,5 @@
+cron:
+- description: facebook feed update
+  url: /fbuserfeedupdate
+  schedule: every 7 minutes
+

@@ -1,0 +1,53 @@
+application: myfacebookwallsearch
+version: 47
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /images
+  static_dir: images
+
+- url: /css
+  static_dir: css
+
+- url: /js
+  static_dir: js
+
+- url: /mobile 
+  script: mobile.app
+
+- url: /mobileApp
+  script: mobile_app.app
+
+- url: /test
+  script: unit_test.app
+
+- url: /fbuserfeedupdate
+  script: feedupdate.app
+
+- url: /tagcloud
+  script: tagcloud.app
+
+- url: /tagcloudfriends
+  script: tagcloudfriends.app
+
+- url: /privacy
+  script: privacy.app
+
+- url: /.*
+  script: main.app
+
+error_handlers:
+  - file: default_error.html
+
+  - error_code: over_quota
+    file: over_quota.html
+
+
+libraries:
+- name: jinja2
+  version: latest
+
+builtins:
+- deferred: on

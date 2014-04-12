@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <title>
+        </title>
+        <link rel="stylesheet" href="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="css/my.css" />
+        <script src="https://s3.amazonaws.com/codiqa-cdn/jquery-1.7.2.min.js">
+        </script>
+        <script src="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.js">
+        </script>
+        <script src="js/my.js">
+        </script>
+        <!-- User-generated css -->
+        <style>
+        </style>
+        <!-- User-generated js -->
+        <script>
+
+       </script>
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="page1">
+            <div data-role="content">
+                <form id="srchform" action="/mobileApp" method="GET">
+                    <div id="srchbox" data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="srchbox">
+                                See who said
+                            </label>
+                            <input name="searchbox" id="searchbox" type="search" />
+                        </fieldset>
+                    </div>
+
+                    <input data-theme="b" value="Search" type="submit" />
+                </form>
+    <div>
+                        <p>&nbsp;</p>
+
+
+    {% if results %}
+       <ul data-role="listview" rel="external">
+         {% for result in results %}
+            <li><a href="{{ result.post_link }}">{{ result.from_user }} on {{ result.created_time }} </a></li>
+         {% endfor %}
+       </ul>
+    {% endif %}
+    </div>
+               
+        </div>
+        </div>
+
+     <input type="hidden" id="last_search_term" name="last_search_term" value="{{ last_search_term }}">
+    </body>
+
+
+</html>

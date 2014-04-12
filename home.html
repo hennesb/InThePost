@@ -1,0 +1,301 @@
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>In the Post</title>
+<link rel="stylesheet" href="css/jquery-ui.css" />
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/jquery-ui.js"></script>
+
+<script type="text/javascript" src="js/jquery-tinyscrollbar.js"></script>
+<link type="text/css" href="css/fb.css" rel="stylesheet" />
+<script>
+$(function() {
+$( "#tabs" ).tabs();
+});
+
+   function convertServerCallToHtml(json)
+   {
+      var data="";
+      var responseObject=JSON.parse(json);
+   
+      for(var i=0;i<responseObject.matchingResults.length;i++)
+      {      
+			var obj = responseObject.matchingResults[i];                                 
+                        var url = obj['post_link'];
+                        var from_user=obj['from_user'];                       
+                        var date_created = obj['created_time']; 						
+			//var individualDivurl ="<div onclick=\"top.location.href='https://www.facebook.com ';\">";
+
+                        var individualDivurl ="<div onclick=\"top.location.href='" + url +"';\">";
+			var individualDivP1 = "<div class='mainData3' style='float:left'><strong>Mentioned by ";//date gets added on here
+			var individualDivP2 = "";//name in this one
+			var individualDivP3 = "  </strong>";//comment in here
+			var individualDivP4 = "</div></div>";//end of
+                 	data = data + individualDivurl + individualDivP1 + from_user  + " on the " + date_created + " " + " in this post."+  			   				individualDivP3  +  individualDivP4;
+      }
+ 
+     return data;
+   }
+
+
+   function displayLoading() 
+   {
+      document.getElementById("error").style.display = "none";  
+      document.getElementById("loading").style.display = "block";	
+      document.getElementById("notfound").style.display = "none";	
+   }
+
+
+   function loadSearchResults()
+   {
+
+	document.getElementById("results").style.display = "none";		
+        if (document.getElementById("searchbox").value == null || document.getElementById("searchbox").value == ''){
+			displayError();
+                        return;
+        }
+
+        displayLoading();
+        document.getElementById("resultsSpan").innerHTML="";
+        var xmlHttp = false;
+
+	try {
+	  xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+	} catch (e) {
+	  try {
+	    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	  } catch (e2) {
+	    xmlHttp = false;
+	  }
+	}
+
+
+	if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+	  xmlHttp = new XMLHttpRequest();
+	}
+
+	xmlHttp.open("POST","/init",true);
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	var token=encodeURIComponent(document.getElementById('token').value);
+	var search_terms=encodeURIComponent(document.getElementById('searchbox').value);
+        var max_posts=encodeURIComponent(document.getElementById('max_posts').value);
+        var text;
+	xmlHttp.onreadystatechange = function ()  {
+                                            if (xmlHttp.readyState==4 && xmlHttp.status==200)
+                                            {                                               					
+						text=xmlHttp.responseText;
+                                                
+                                                text=convertServerCallToHtml(text);
+
+                                                document.getElementById("resultsSpan").innerHTML=text;
+                                                document.getElementById("searchbox").focus();
+		                                document.getElementById("loading").style.display = "none";
+		                                document.getElementById("results").style.display = "block";
+                                                if (text==""){
+                                                   displayNoResultsFound();
+                                                }
+                                                $(document).ready(function(){
+ 									   $('#scrollbar1').tinyscrollbar();
+		                                                            });
+                                                
+                                                
+
+                                           }
+                                      } 
+        var params = "token="+token+"&search_terms="+search_terms+"&max_posts=" + max_posts;
+	xmlHttp.send(params);
+   }
+
+   function load()
+   {
+        document.getElementById("searchbox").focus();
+        if (document.getElementById('last_search_term') == null){
+            return;
+        }
+        last_search_result = document.getElementById('last_search_term').value
+        document.getElementById("searchbox").value = last_search_result
+        displayLoading();
+	document.getElementById("results").style.display = "none";		
+        document.getElementById("resultsSpan").innerHTML="";
+        var xmlHttp = false;
+
+
+	try {
+	  xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+	} catch (e) {
+	  try {
+	    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	  } catch (e2) {
+	    xmlHttp = false;
+	  }
+	}
+
+
+
+	if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+	  xmlHttp = new XMLHttpRequest();
+	}
+
+	xmlHttp.open("POST","/init",true);
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	var token=encodeURIComponent(document.getElementById('token').value);
+	//var search_terms=encodeURIComponent(document.getElementById('searchbox').value);
+        var search_terms=encodeURIComponent(last_search_result);
+        var max_posts=encodeURIComponent(document.getElementById('max_posts').value);
+        var text;
+	xmlHttp.onreadystatechange = function ()  {
+                                            if (xmlHttp.readyState==4 && xmlHttp.status==200)
+                                            {                                               					
+						text=xmlHttp.responseText;
+                                                text=convertServerCallToHtml(text);
+
+                                                document.getElementById("resultsSpan").innerHTML=text;
+                                                document.getElementById("searchbox").focus();
+		                                document.getElementById("loading").style.display = "none";
+		                                document.getElementById("results").style.display = "block";
+                                                if (text=="" && document.getElementById('last_search_term') != null && document.getElementById('searchbox') !=null){
+                                                   displayNoResultsFound();
+                                                }
+                                                $(document).ready(function(){
+ 									   $('#scrollbar1').tinyscrollbar();
+		                                                            });
+
+                                           }
+                                      } 
+        var params = "token="+token+"&search_terms="+search_terms+"&max_posts=" + max_posts;
+	xmlHttp.send(params);
+       
+   }
+        
+    
+   function mouseOver()
+	{
+		//document.getElementById("button").innerHTML = "<img src='images/search2.gif' width='172' height='37'>";
+		document.getElementById("searchBut").src = "images/searchFeed2.gif";
+	}
+   function mouseOut()
+	{
+		//document.getElementById("button").innerHTML = "<img src='images/search1.gif' width='172' height='37'>";
+		document.getElementById("searchBut").src = "images/searchFeed1.gif";
+	}  
+
+   
+    function displayError() {
+           document.getElementById("error").style.display = "block";	
+           document.getElementById("notfound").style.display = "none";		
+           document.getElementById('last_search_term').value='';
+
+	}
+   
+   function displayNoResultsFound(){
+      if (document.getElementById('last_search_term').value != '' && document.getElementById('searchbox').value != ''){
+          document.getElementById("results").style.display = "none";
+          document.getElementById("loading").style.display = "none";	
+          document.getElementById("notfound").style.display = "block";
+      }else{
+          document.getElementById("results").style.display = "none";
+      }
+   }
+
+	
+	function loadResults() {
+		document.getElementById("loading").style.display = "none";
+		document.getElementById("results").style.display = "block";
+                document.getElementById("notfound").style.display = "none";
+				
+	}
+
+
+
+
+</script>
+</head>
+<body onload="load()">
+<div id="tabs">
+<ul>
+<li><a href="#tabs-1"><font face="verdana" color="#000096" size="2">Search Posts</font></a></li>
+<li><a href="tagcloud"><font face="verdana" color="#000096" size="2">Tag cloud my posts</font></a></li>
+<li><a href="/tagcloudfriends"><font face="verdana" color="#000096" size="2">Tag cloud my friend's posts</font></a></li>
+</ul>
+<div id="tabs-1">
+<p>
+
+
+<input type="hidden" id="token" name="token" value="{{ token }}">
+<input type="hidden" id="max_posts" name="max_posts" maxlength="3" length="3" value="250">
+<input type="hidden" id="last_search_results" name="last_search_results" value="{{ last_search_results }}">
+<input type="hidden" id="last_search_term" name="last_search_term" value="{{ last_search_term }}">
+
+
+<div class="fbbody" id="main" style="WIDTH: 760px" align="center">
+	<div class="fbcanvasinner">	
+
+		
+		<br> 
+			<font face="verdana" color="#000096" size="2">Welcome {{userFullName}} , search posts between {{minDate}} and {{maxDate}}</font>  <br> 
+
+		<br>
+		<div >
+		   <input name="textfield" id="searchbox" type="text" size="50" maxlength="100">
+
+		</div>
+	  	<br><br>
+		
+		<label class="uiButton uiButtonLarge uiButtonConfirm" onClick="loadSearchResults()"><input value="Search My facebook Wall" onclick="" type="submit"> 
+                </label>
+
+            </br>
+	    <div id="loading" align="center" style="display:none;padding-top:60px">
+			<img src='images/loading.gif' width='32' height='32'>
+	   </div>
+	   <div class="fberrorbox" id="error" style="display:none;WIDTH: 303px;margin-top:60px">
+			Please enter a search term
+	   </div>
+
+	   <div class="fberrorbox" id="notfound" style="display:none;WIDTH: 303px;margin-top:60px">
+			We could not find a post or comment on your wall matching your search term
+	   </div>
+
+
+	  <div id="results" class="resultsDiv">
+             <div id="scrollbar1">
+	         <div class="scrollbar">
+		     <div class="track"> 
+		         <div class="thumb"> 
+			     <div class="end">
+                             </div>
+		         </div>
+		     </div>
+		 </div>
+		 <div class="viewport" > 
+		     <div class="overview"> 
+		         <div id="resultsMain">
+			     <span id="resultsSpan">
+			     </span>    
+			 </div>
+		     </div>
+		</div>
+	     </div>
+        </div>
+
+
+
+
+
+
+
+       </div>
+</div>
+
+
+</p>
+</div>
+<div id="tabs-2">
+</div>
+
+<div id="tabs-3">
+</div>
+
+</div>
+</body>
+</html>

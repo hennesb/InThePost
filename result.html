@@ -1,0 +1,13 @@
+<html>
+  <body>
+ 
+    <h1> Search my Facebook feeds </h1>
+    <p>You have {{matches|length}} matches for <b>{{search_input}}</b></p>
+       {% for url in matches %}
+          <p><a href="{{ url }}">{{ url }}</a></p>
+       {% endfor %}
+
+
+
+  </body>
+</html>

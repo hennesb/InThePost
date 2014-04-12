@@ -1,0 +1,62 @@
+indexes:
+
+- kind: Posts
+  properties:
+  - name: owner
+  - name: post_contents
+  - name: post_datetime
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: owner
+  - name: post_datetime
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: owner
+  - name: post_datetime
+    direction: asc
+
+- kind: Posts
+  properties:
+  - name: owner
+  - name: post_owner_id
+  - name: entry_type
+  - name: post_datetime
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: comment_user_id
+  - name: post_datetime
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: comment_user_id
+  - name: entry_type
+  - name: owner
+  - name: post_datetime
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: entry_type
+  - name: post_owner_id
+  - name: post_datetime
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: comment_user_id
+  - name: entry_type
+  - name: post_datetime
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: owner
+  - name: date_time_inserted
+    direction: desc

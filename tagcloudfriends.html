@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>In the Post Friend's Word Cloud </title>
+<link rel="stylesheet" href="css/jquery-ui.css" />
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/jquery-ui.js"></script>
+<link type="text/css" href="css/fb.css" rel="stylesheet"/>
+
+<script>
+
+
+   function displayLoading() 
+   {
+      document.getElementById("loading").style.display = "block";	
+   }
+
+
+   function loadTagCloud(){
+        displayLoading();
+        document.getElementById("resultsSpan").innerHTML="";
+        var xmlHttp = false;
+
+	try {
+	  xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+	} catch (e) {
+	  try {
+	    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	  } catch (e2) {
+	    xmlHttp = false;
+	  }
+	}
+
+
+	if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+	  xmlHttp = new XMLHttpRequest();
+	}
+
+	xmlHttp.open("POST","/tagcloudfriends",true);
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	var fb_user=encodeURIComponent(document.getElementById('tagcloudselectionid').value);
+        var text;
+	xmlHttp.onreadystatechange = function ()  {
+                                            if (xmlHttp.readyState==4 && xmlHttp.status==200)
+                                            {                                               					
+						text=xmlHttp.responseText;                                              
+                                                document.getElementById("tag").innerHTML=text;
+		                                document.getElementById("loading").style.display = "none"
+                                                
+                                           }
+                                      } 
+        var params = "friend="+fb_user;
+	xmlHttp.send(params);
+   }
+
+
+
+</script>
+
+
+
+
+<body>
+<div class="fbtagcloud" style="WIDTH: 680px" overflow="auto">
+    <select name="tagcloudselection" id="tagcloudselectionid" class="fbbodydarkblue">
+        {% for friend in friends %}
+            <option value="{{friend.id}}">{{ friend.name }}</option>
+        {% endfor %}
+    </select> 
+    <p></p>
+
+    <label class="uiButton uiButtonLarge uiButtonConfirm" onClick="loadTagCloud()">
+       <input value="Retrieve Tagcloud" onclick="" type="submit"> 
+    </label>
+
+
+
+ <div id="tag">
+
+ </div>
+
+</div>
+
+ <div id="loading" align="center" style="display:none">
+    <img src='images/loading.gif' width='32' height='32'>
+ </div>
+</body>
+
+</html>

@@ -153,7 +153,7 @@ class MainPage(webapp2.RequestHandler):
             template = jinja_environment.get_template('new_home.html')
             self.response.out.write(template.render(template_values))
           else:
-            login_url="https://www.facebook.com/dialog/oauth?client_id=368589609876475&scope=read_stream&redirect_uri=https://apps.facebook.com/srchfeeds/"
+            login_url="https://www.facebook.com/dialog/oauth?client_id=XXX&scope=read_stream&redirect_uri=https://apps.facebook.com/srchfeeds/"
             self.response.out.write("<script> top.location.href='" + login_url +"'</script>")
 
 
@@ -171,8 +171,8 @@ class OAuthTokenProcessor(webapp2.RequestHandler):
        return fbUser,fbName
 
     def getAccessToken(self,code):
-       url1="https://graph.facebook.com/oauth/access_token?client_id=368589609876475&redirect_uri=https://myfacebookwallsearch.appspot.com/init&"
-       url2="client_secret=9610ada038dcf5cf1d83fe3da31906bd&code="
+       url1="https://graph.facebook.com/oauth/access_token?client_id=XXXX&redirect_uri=https://myfacebookwallsearch.appspot.com/init&"
+       url2="client_secret=XXXXX&code="
        url = url1 + url2 + code
        result = urlfetch.fetch(url)
        logging.info('Url fetched ')
@@ -213,7 +213,7 @@ class OAuthTokenProcessor(webapp2.RequestHandler):
         logging.info(code)
         access_code = ''
 	if (len(code) < 1):
-          self.redirect("https://www.facebook.com/dialog/oauth?client_id=368589609876475&scope=read_stream&redirect_uri=https://myfacebookwallsearch.appspot.com/init")
+          self.redirect("https://www.facebook.com/dialog/oauth?client_id=XXXX&scope=read_stream&redirect_uri=https://myfacebookwallsearch.appspot.com/init")
 	
         #access_token=self.getAccessToken(code) 
         #session['access_token'] = access_token

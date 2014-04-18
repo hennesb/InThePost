@@ -17,7 +17,7 @@ from google.appengine.ext import db
 
 def genLongLivedAccessToken(user,existing_access_token):
   url1 = "https://graph.facebook.com/oauth/access_token?"
-  url2 = "client_id=368589609876475&client_secret=9610ada038dcf5cf1d83fe3da31906bd&grant_type=fb_exchange_token&fb_exchange_token="+existing_access_token
+  url2 = "client_id=XX&client_secret=XX&grant_type=fb_exchange_token&fb_exchange_token="+existing_access_token
   url = url1 + url2
   result = urlfetch.fetch(url)
   regex =re.compile('access_token=(.*?)&expires=')
@@ -29,7 +29,7 @@ def genLongLivedAccessToken(user,existing_access_token):
 
 def genLongLivedAccessTokenSingleParam(existing_access_token):
   url1 = "https://graph.facebook.com/oauth/access_token?"
-  url2 = "client_id=368589609876475&client_secret=9610ada038dcf5cf1d83fe3da31906bd&grant_type=fb_exchange_token&fb_exchange_token="+existing_access_token
+  url2 = "client_id=XXX&client_secret=XXXX&grant_type=fb_exchange_token&fb_exchange_token="+existing_access_token
   url = url1 + url2
   result = urlfetch.fetch(url)
   regex =re.compile('access_token=(.*?)&expires=')
